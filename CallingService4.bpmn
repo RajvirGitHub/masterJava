@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.2">
+  <bpmn:process id="CallingService4" name="CallingService4" isExecutable="true">
+    <bpmn:startEvent id="Start" name="Start">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="inputJson" label="Enter Input:" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0mfwnve</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0mfwnve" sourceRef="Start" targetRef="CallTicket" />
+    <bpmn:serviceTask id="CallTicket" name="Call Ticket">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:8988/restartInfo</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="content-type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">${inputJson}</camunda:inputParameter>
+            <camunda:outputParameter name="Output">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0mfwnve</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_133e2l2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_133e2l2" sourceRef="CallTicket" targetRef="display" />
+    <bpmn:scriptTask id="display" name="Display" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_133e2l2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bfu3si</bpmn:outgoing>
+      <bpmn:script><![CDATA[println"Output is $Output"]]></bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="EndEvent_160aa9g">
+      <bpmn:incoming>SequenceFlow_0bfu3si</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0bfu3si" sourceRef="display" targetRef="EndEvent_160aa9g" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="CallingService4">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Start">
+        <dc:Bounds x="180" y="183" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="186" y="219" width="23" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0mfwnve_di" bpmnElement="SequenceFlow_0mfwnve">
+        <di:waypoint xsi:type="dc:Point" x="216" y="201" />
+        <di:waypoint xsi:type="dc:Point" x="258" y="201" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="237" y="186" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_09gdo49_di" bpmnElement="CallTicket">
+        <dc:Bounds x="258" y="161" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_133e2l2_di" bpmnElement="SequenceFlow_133e2l2">
+        <di:waypoint xsi:type="dc:Point" x="358" y="201" />
+        <di:waypoint xsi:type="dc:Point" x="391" y="201" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="375" y="186" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1ar078b_di" bpmnElement="display">
+        <dc:Bounds x="391" y="161" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_160aa9g_di" bpmnElement="EndEvent_160aa9g">
+        <dc:Bounds x="545" y="183" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="563" y="219" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bfu3si_di" bpmnElement="SequenceFlow_0bfu3si">
+        <di:waypoint xsi:type="dc:Point" x="491" y="201" />
+        <di:waypoint xsi:type="dc:Point" x="545" y="201" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="518" y="176" width="0" height="0" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
